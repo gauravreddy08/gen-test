@@ -1,0 +1,20 @@
+[
+    {
+        "type": "function",
+        "function": {
+            "name": "write_file",
+            "description": "Writes content into file",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "file_path": {
+                        "type": "string",
+                        "description": "Full path for the file to edit or create"
+                    },
+                    "content": {"type": "string", "description": "Content that should be written to file"}
+                },
+                "required": ["file_path", "content"]
+            }
+        }
+    }
+]

@@ -1,0 +1,90 @@
+codebase_init = """You are a Software Developer tasked with understanding and documenting a codebase. The code is provided below, identified between the ``` ``` delimiters. Each section of code is prefixed with its file path to help you understand the structure of the codebase.
+
+Your tasks are as follows:
+1. **File-Level Documentation**: Edit files and add a descriptive comment at the top of each code file explaining its purpose and functionality.
+2. **Function-Level Documentation**: Edit files and add descriptive comments above each function within the code files. These comments should detail what the function does, its parameters, return values, and any important logic within the function.
+
+For example:
+# file: src/main.py
+```
+'''\n
+This file serves as the entry point for the application. It initializes the app and handles the main execution flow.
+'''\n
+
+def main():
+    '''\n
+    Main function that initializes and runs the application.
+    - Initializes configuration and settings
+    - Starts the application loop
+    '''\n
+    # Code implementation here
+```
+
+# file: src/utils/helpers.py
+```
+'''\n
+This file contains utility functions that assist with various common tasks throughout the application.
+'''\n
+
+def calculate_sum(a, b):
+    '''\n
+    Calculates the sum of two numbers.
+
+    Parameters:
+    a (int): The first number
+    b (int): The second number
+    
+    Returns:
+    int: The sum of a and b
+    '''\n
+    return a + b
+```
+
+Make sure to follow this format for every file and function in the codebase. This will greatly enhance the readability and maintainability of the code.
+Here is the code you need to document:
+
+{}
+"""
+
+generate_test = """
+You are now a Software tester. Your task is to **create** or **update** the test file for the given code. Use your knowledge of the code base to write the test cases.
+
+**Selected File:**
+
+{}
+
+**Code:**
+
+```python
+{}
+```
+
+### Guidelines:
+
+1. **File Path**:
+   - Please create the test file at (if directory, name the test file yourself): {}
+   - If a directory is given, write the test entirely from start.
+   - If a test file is provided (along with its content), analyze it and add any necessary additional test cases to ensure full coverage.
+   
+2. **Existing Test File**:
+   - If a test file already exists, integrate the new tests into it, while also adding new test cases. Ensure consistency with existing test suite style and structure.
+   - Review the existing tests and determine if there are any missing scenarios or edge cases that need to be added.
+
+3. **Test Cases**:
+   - Identify and list all necessary test cases for full code coverage, including edge cases and error cases.
+   
+4. **Test Structure**:
+   - Ensure consistency with any existing test suite style and structure if updating a file.
+   - Use appropriate test frameworks and libraries.
+   
+5. **Exception Handling**:
+   - Write tests to handle exceptions and errors gracefully.
+
+# Now, use function calls to create or update the test file for the provided code using these guidelines.
+
+### Existing Test file content:
+
+```
+{}
+```
+"""
