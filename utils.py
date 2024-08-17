@@ -1,39 +1,34 @@
-import toml
 import inquirer
+import subprocess
+import os
 
-class Prompt():
-    def __init__(self, filename='prompts.toml'):
-        file = open(filename, 'r')
-        self.data = toml.load(file)
+def run_command(command):
+    result = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
+    return result.stdout.strip()
 
-    def fetch(self, key: str) -> str:
-        return self.data[key]
+def get_user_choice(items, message="Select an option", addNone=False):
+    if addNone: items.append(None)
+    questions = [
+        inquirer.List('item',
+                    message=message,
+                    choices=items,
+                ),
+    ]
+    answers = inquirer.prompt(questions)
+    return answers['item'] 
 
-def write_file(file_path: str, content: str) -> str:
-    print(file_path)
-    try:
-        with open(file_path, 'w+') as file:
-            file.write(content)
-        response = f"Changed {file_path}"
-        file.close()
-    except FileNotFoundError:
-        response = "The file does not exist."
-    except Exception as e:
-        response = "An unexpected error occurred: {e}"
-    
-    return response
+def get_target_coverage(min_val=0, max_val=100):
+    number = -1
+    while number < min_val or number > max_val:
+        try:
+            number = int(input(f"Please enter a number between {min_val} and {max_val}: "))
+            if number < min_val or number > max_val:
+                print(f"Number out of range. Please enter a number between {min_val} and {max_val}.")
+        except ValueError:
+            print("Invalid input. Please enter a valid integer.")
+    return number
 
-def get_user_choice(items, message="Select an option"):
-        questions = [
-            inquirer.List('item',
-                        message=message,
-                        choices=items,
-                    ),
-        ]
-        answers = inquirer.prompt(questions)
-        return answers['item'] 
-
-def DIVIDE(title=None, character='-', length=40):
+def DIVIDE(title=None, character='-', length=50):
     if title:
         # Calculate the padding needed to center the title
         padding = (length - len(title) - 2) // 2

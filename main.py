@@ -1,49 +1,61 @@
-from LLMModel import LLMModel
+from LLM import LLM
 from CodeBaseProcessor import CodeBaseProcessor
-from utils import Prompt, get_user_choice, DIVIDE
+from prompts import systemPrompt, generaionPrompt, existingTestPrompt
+from utils import get_user_choice, DIVIDE, get_target_coverage
+import sys
 
+def main(directory):
 
-def main():
+    codebase = CodeBaseProcessor(directory)
+    codebase.open_report()
 
-    DIVIDE("Initialization", "=")
-    prompt = Prompt()
-    codebase = CodeBaseProcessor('root')
-    llm = LLMModel()
-    DIVIDE()
-
-    # Initializing the LLM Model on codebase
-    DIVIDE("Reading Codebase", "=")
-    print("[INFO] Understanding existing codebase")
-    init_prompt = prompt.fetch('codebase_init').format(codebase.read_content())
-    result = llm.get(prompt=init_prompt, 
-                     tool_choice='auto')
-    print(result)
-    DIVIDE()
-
-    # Selecting the source file to generate tests
-    DIVIDE("Selecting Source File", "=")
-    source_file = get_user_choice(codebase.file_paths, "Select a source file to generate tests")
-    print(f"[INFO] {source_file} chosen for generating test cases")
-    source_file_content = codebase._readFile(source_file)
-    DIVIDE()
-
-    # Looking through existing test files
-    DIVIDE("Selecting Test File", "=")    
-    test_file = get_user_choice(codebase.test_files, "Select an existing test file")
-    test_file_content = codebase._readFile(test_file)
-    print(f"[INFO] {test_file} chosen for existing test cases")
-
-    # Calling the LLM to generate the tests
-    generate_tests_prompt = prompt.fetch('generate_test').format(source_file, source_file_content, test_file, test_file_content)
-
-    result = llm.get(prompt=generate_tests_prompt,
-                     tool_choice='auto')
+    while True:
     
-    print(result)
+        repo_tree = codebase.get_tree()
+        DIVIDE()
 
-    DIVIDE()
-    DIVIDE()
+        # Initializing the LLM Model on codebase
+        system_prompt = systemPrompt.format(repo_tree=repo_tree)
+        llm = LLM(systemPrompt=system_prompt,
+                codebase=codebase)
+        DIVIDE()
+
+        # Selecting the source file to generate tests
+        source_file = get_user_choice(codebase.file_paths, "Select a source file to generate tests")
+        source_block = get_user_choice(codebase.database[source_file], "Select a block to generate tests for")
+        block_content = codebase.retrieve(source_file, source_block)
+        print(f"[USER] {source_block} chosen for generating test cases")
+        DIVIDE()
+
+        test_file = get_user_choice(codebase.test_files, "Select a existing test file to enhance", addNone=True)
+        print(f"[USER] {test_file} chosen as existing test code")
+        DIVIDE()
+
+        desired_coverage = get_target_coverage()
+
+        DIVIDE()
+        
+        prompt = generaionPrompt.format(file_path = source_file, 
+                                        name=source_block, 
+                                        code_block=block_content, 
+                                        desired_coverage=desired_coverage)
+        if test_file:
+            prompt += existingTestPrompt.format(file_path=test_file, code_block = codebase.read_file(test_file))
+
+        response = llm.get(prompt)
+        DIVIDE()
+        print(response)
+        DIVIDE()
+
+        continue_processing = input("Would you like to process another file? (yes/no): ").strip().lower()
+
+        if continue_processing not in ["yes", "no"]:
+            continue_processing = "no"
+
+        if continue_processing=='no': break
+
+    codebase.open_report()
 
 if __name__=='__main__':
-    main()
-
+    args = sys.argv
+    main(args[1])

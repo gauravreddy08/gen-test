@@ -3,18 +3,63 @@
         "type": "function",
         "function": {
             "name": "write_file",
-            "description": "Writes content into file",
+            "description": "Creates or updates a file with the specified content. This function is used to write new content to a file or to modify existing content within a file, ensuring that the file is saved at the specified path.",
             "parameters": {
                 "type": "object",
                 "properties": {
                     "file_path": {
                         "type": "string",
-                        "description": "Full path for the file to edit or create"
+                        "description": "The full path where the file should be created or edited. This includes the directory and the filename."
                     },
-                    "content": {"type": "string", "description": "Content that should be written to file"}
+                    "content": {
+                        "type": "string",
+                        "description": "The content that should be written into the file. If the file already exists, the content will be appended or modified accordingly to ensure consistency and completeness."
+                    }
                 },
                 "required": ["file_path", "content"]
             }
         }
-    }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "retriever",
+            "description": "Retrieves a specified code block (class or method) from a given file. This function is used to extract specific code segments to understand and analyze the code structure.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "file_path": {
+                        "type": "string",
+                        "description": "The full path to the file from which the code block should be retrieved. This includes the directory and the filename."
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "The name of the class or method to retrieve. Only provide the name of the class or method, not the full code."
+                    }
+                },
+                "required": ["file_path", "name"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_coverage",
+            "description": "Provides a code coverage report for a specific class or method in a Java source file. This can be used to assess how much of the target class or method is covered by the test cases",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "file_path": {
+                        "type": "string",
+                        "description": "The full path to the Java source file, including the directory and filename. This is where the specified class or method is located."
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "The name of the class or method for which you want to get the code coverage. Only provide the name, not the full code or signature."
+                    }
+                },
+                "required": ["file_path", "name"]
+            }
+        }
+    }        
 ]
