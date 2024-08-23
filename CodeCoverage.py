@@ -1,6 +1,5 @@
 import os
 import xml.etree.ElementTree as ET
-
 class CodeCoverage():
     def __init__(self, directory):
         self.directory = directory

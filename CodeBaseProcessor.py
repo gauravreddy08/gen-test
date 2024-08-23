@@ -42,14 +42,6 @@ class CodeBaseProcessor():
 
         self.read_content()
 
-    # def _find_src(self):
-    #     if os.path.isdir(os.path.join(self.directory, 'src')):
-    #         return os.path.join(self.directory, 'src')
-    #     elif os.path.isdir(os.path.join(self.directory, 'app', 'src')):
-    #         return os.path.join(self.directory, 'app', 'src')
-    #     else:
-    #         raise Exception("Source directory not found. Please specify the correct path using the `source_path` parameter.")
-
     def _getFilePaths(self, directory: str) -> List[str]:
         file_paths = []
 

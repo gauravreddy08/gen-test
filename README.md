@@ -1,8 +1,12 @@
-## Functioning
+## How the code works
 
 ### 1. Reading and Initializing the Codebase
 
-The code base is first split into chunks (classes and method) using [tree-sitter](https://tree-sitter.github.io/tree-sitter/) (parser generator tool and an incremental parsing library). Using the same, the structure of the codebase is passed through the LLM (in system prompt) as a repository tree (for the LLM to understand the codebase), shown below.
+![1](assets/1.png)
+
+The code base is first split into chunks (classes and methods) using [tree-sitter](https://tree-sitter.github.io/tree-sitter/) (parser generator tool and an incremental parsing library). Using the same, the structure of the codebase is passed through the LLM (in system prompt) as a syntax tree (for the LLM to understand the codebase) 
+
+An example shown below:
 
 ```
 File Path: root/app/src/test/java/UserManagerTest.java
@@ -36,6 +40,8 @@ Also the system also makes sure to have **gradle project** initialized (automate
 
 ### 2. Initializing the LLM
 
+![2](assets/2.png)
+
 After the code base is been processed and ready the LLM client (OpenAI gpt-4o) will be initialized. The LLM would have access to mainly two functions: `write_file` and `retrieve`. These functions take respectively their own set of parameters (intelligently given by the LLM) and perform tasks for LLM.
 
 - `write_file` : Used to write or create files. Mainly used to finally generate the test cases.
@@ -52,12 +58,14 @@ The system essentially takes three inputs,
 
 The LLM then, essentially perform series of retrievals and writing until its done
 
+![3](assets/3.png)
+
 ---
 
 ## Steps to run it
 
 1. Make sure to install `requirements.txt` , `Java (I used 22)` and `gradle`
-2. Make sure to have your Java project into this root directory in `src` folder
+2. Make sure to have your Java project into this root directory in `src` folder, like below:
     
     ```
     root
