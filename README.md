@@ -1,4 +1,4 @@
-[Youtube Demo]([https://www.youtube.com/watch?v=YVG4W2K_qn0](https://youtu.be/PYhTg8f4q08))
+> **Watch it working on [Youtube](https://youtu.be/PYhTg8f4q08)**
 
 ## How the code works
 
